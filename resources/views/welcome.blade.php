@@ -73,12 +73,13 @@
                                     <div class="card text-white mb-3" >
 
                                         <div class="card-body">
-                                            <h4 class="card-title text-black">Primary card title</h4>
-                                            <p> hello world</p>
-
+                                                <h1>&&sdjasl</h1>
                                         </div>
                                     </div>
-                                    <button type="button" class="btn btn-primary btn-lg"> book now</button>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                       BookNow
+                                    </button>
+
                                 </div>
                             </div>
                         </div>
@@ -87,6 +88,68 @@
                </div>
            </div>
        </div>
+       <!-- Vertically centered modal -->
+       <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+           <div class="modal-dialog modal-dialog-centered">
+               <div class="modal-content">
+                   <div class="modal-header">
+                       <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                   </div>
+                   <div class="modal-body">
+                       <div class="row">
+                           <div class="col-sm-6">
+                               <div class="mb-3">
+                                   <label for="selected_date" class="form-label">Date</label>
+                                   <input type="text" name="selected_date" class="form-control-plaintext" id="selected_date" >
+                               </div>
+                           </div>
+                           <div class="col-sm-6">
+                               <div class="mb-3">
+                                   <label for="selected_time" class="form-label">Time</label>
+                                   <input type="text" name="selected_time" class="form-control-plaintext" id="selected_time" >
+                               </div>
+                           </div>
+                       </div>
+                       <div class="row">
+                           <div class="col-sm-6">
+                               <div class="mb-3">
+                                   <label for="first_name" class="form-label">First Name</label>
+                                   <input type="text" name="first_name" class="form-control" id="first_name" placeholder="Enter the first name">
+                               </div>
+                           </div>
+                           <div class="col-sm-6">
+                               <div class="mb-3">
+                                   <label for="last_name" class="form-label">Last Name</label>
+                                   <input type="text" class="form-control" name="last_name" id="last_name" placeholder="Enter your last name">
+                               </div>
+                           </div>
+                       </div>
+                       <div class="row">
+                           <div class="col-sm-6">
+                               <div class="mb-3">
+                                   <label for="email" class="form-label">Email address</label>
+                                   <input type="email" class="form-control" name="email" id="email" placeholder="name@example.com">
+                               </div>
+                           </div>
+                           <div class="col-sm-6">
+                               <div class="mb-3">
+                                   <label for="phone_no" class="form-label">Phone No.</label>
+                                   <input type="text" class="form-control" name="phone_no" id="phone_no" placeholder="Enter you number">
+                               </div>
+                           </div>
+                       </div>
+
+                   </div>
+                   <div class="modal-footer">
+                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                       <button type="button" class="btn btn-primary">Save changes</button>
+                   </div>
+               </div>
+           </div>
+       </div>
+       <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 
    </body>
 </html>
