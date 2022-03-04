@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('table_types', function (Blueprint $table) {
             $table->id();
             $table->string('table_type');
-            $table->string('occupancy');
+            $table->string('serving_capacity');
             $table->timestamps();
         });
     }

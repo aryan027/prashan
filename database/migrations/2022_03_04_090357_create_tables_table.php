@@ -16,7 +16,9 @@ return new class extends Migration
         Schema::create('tables', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('table_type_id');
-            $table->foreign('table_type_id')->references('id')->on('table_type')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('table_type_id')->references('id')->on('table_types')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('table_number');
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }
