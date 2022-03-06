@@ -5,12 +5,28 @@ namespace App\Http\Controllers;
 use App\Models\Bookings;
 use App\Models\Tables;
 use Carbon\Carbon;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 class BookingController extends Controller
 {
-    public function ListAvailability($date, $time, $guest)
-    {
+    /**
+     * Getting the booking information through post method.
+     *
+     * @param Request $request
+     * @return Application|Factory|View|string
+     */
+    public function ListAvailability(Request $request) {
+        $data = $this->validate($request, [
+            'date' => 'required|date',
+            'time' => 'required',
+            'guest' => 'required|numeric'
+        ]);
+        $date = $data['date'];
+        $time = $data['time'];
+        $guest = $data['guest'];
         $book_date = date('Y-m-d', strtotime($date));
         $book_time = date('H:i', strtotime($time));
         $tables = Tables::whereHas('TableType', function ($q) use ($guest) {$q->where('serving_capacity', '>=', $guest);})->where(['status' => true])->get();
@@ -33,7 +49,7 @@ class BookingController extends Controller
                 }
             }
         }
-        return view('welcome', compact('tableList'));
+        return $tableList;
     }
 
     /**

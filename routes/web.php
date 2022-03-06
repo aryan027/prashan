@@ -21,4 +21,4 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/book', [BookingController::class, 'ListAvailability'])->name('booking');
+Route::post('/book', [BookingController::class, 'ListAvailability'])->name('booking');

@@ -55,14 +55,6 @@
                </div>
            </div>
        </nav>
-       @forelse($tableList as $table)
-           @php $tableInfo = (new \App\Http\Controllers\BookingController)->GetTableInformation($table); @endphp
-           <div class="container">
-               <p>table number is {{ $tableInfo->table_number }} and status is {{ $tableInfo->status }} and serving capacity is {{ $tableInfo->TableType->serving_capacity }}</p>
-           </div>
-       @empty
-           <p>no tables are available</p>
-       @endforelse
        <div class="container">
            <div class="row justify-content-center">
                <div class="col-md-8">
@@ -70,9 +62,9 @@
                        <div class="card-header">{{ __('Pizza Zone Online Reservation System') }}</div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-sm-4"> <input type="date" class="form-control" name="Selected_date"></div>
-                                <div class="col-sm-4"><input type="time" class="form-control" name="Selected_time"></div>
-                                <div class="col-sm-4"><input type="number" class="form-control" name="no_of_person"></div>
+                                <div class="col-sm-4"> <input type="date" class="form-control" name="Selected_date" id="InputDate"></div>
+                                <div class="col-sm-4"><input type="time" class="form-control" name="Selected_time" id="InputTime"></div>
+                                <div class="col-sm-4"><input type="number" class="form-control" name="no_of_person" id="InputGuest"></div>
 
                             </div>
 
@@ -84,7 +76,7 @@
                                                 <h1>&&sdjasl</h1>
                                         </div>
                                     </div>
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="BookNowBTN">
                                        BookNow
                                     </button>
 
@@ -158,6 +150,35 @@
        </div>
        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+       <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+       <script type="text/javascript">
+           const URL = '{{ route('booking') }}';
+           $(document).ready(function () {
+               $(document).on('click', '#BookNowBTN', function () {
+                   const dateVal = $('#InputDate').val();
+                   const timeVal = $('#InputTime').val();
+                   const guestVal = $('#InputGuest').val();
+                   console.log('executed');
+
+                   $.ajax({
+                       url: URL,
+                       type: 'POST',
+                       data: {
+                           _token: '{{ @csrf_token() }}',
+                           date: dateVal,
+                           time: timeVal,
+                           guest: guestVal
+                       },
+                       success: function (response) {
+                           console.log(response);
+                       },
+                       error: function (data) {
+                           console.log(data);
+                       }
+                   });
+               });
+           });
+       </script>
 
    </body>
 </html>
