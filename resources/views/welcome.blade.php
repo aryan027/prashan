@@ -24,34 +24,19 @@
                <div class="collapse navbar-collapse" id="navbarColor03">
                    <ul class="navbar-nav me-auto">
                        <li class="nav-item">
-                           <a class="nav-link active" href="#">Home
-                               <span class="visually-hidden">(current)</span>
+                           <a class="nav-link active" href="{{url('/')}}">Booking
+                               <span class="visually-hidden"></span>
                            </a>
                        </li>
                        <li class="nav-item">
-                           <a class="nav-link" href="#">Features</a>
+                           <a class="nav-link active" href="{{ route('booking.list') }}">Booking List
+                               <span class="visually-hidden"></span>
+                           </a>
                        </li>
-                       <li class="nav-item">
-                           <a class="nav-link" href="#">Pricing</a>
-                       </li>
-                       <li class="nav-item">
-                           <a class="nav-link" href="#">About</a>
-                       </li>
-                       <li class="nav-item dropdown">
-                           <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-                           <div class="dropdown-menu">
-                               <a class="dropdown-item" href="#">Action</a>
-                               <a class="dropdown-item" href="#">Another action</a>
-                               <a class="dropdown-item" href="#">Something else here</a>
-                               <div class="dropdown-divider"></div>
-                               <a class="dropdown-item" href="#">Separated link</a>
-                           </div>
-                       </li>
+
+
                    </ul>
-                   <form class="d-flex">
-                       <input class="form-control me-sm-2" type="text" placeholder="Search">
-                       <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-                   </form>
+
                </div>
            </div>
        </nav>
@@ -62,10 +47,18 @@
                        <div class="card-header">{{ __('Pizza Zone Online Reservation System') }}</div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-sm-4"> <input type="date" class="form-control" name="Selected_date" id="InputDate"></div>
-                                <div class="col-sm-3"><input type="time" class="form-control" name="Selected_time" id="InputTime"></div>
-                                <div class="col-sm-3"><input type="number" class="form-control" name="no_of_person" id="InputGuest"></div>
-                                <div class="col-sm-2">   <button type="button" class="btn btn-primary" id="BookNowBTN">
+                                <div class="col-sm-4">
+                                    <lable>Select Date</lable>
+                                    <input type="date" class="form-control" name="Selected_date" id="InputDate" required></div>
+
+                                <div class="col-sm-3">
+                                    <lable>Select Time</lable>
+                                    <input type="time" class="form-control" name="Selected_time" id="InputTime" required></div>
+                                <div class="col-sm-3">
+                                    <lable>Number of person</lable>
+                                    <input type="text" maxlength="2" class="form-control" onkeypress="return restrictAlphabets(event)" name="no_of_person" id="InputGuest" required></div>
+                                <div class="col-sm-2">
+                                   <button type="button" class="btn btn-primary mt-4" id="BookNowBTN">
                                         Search
                                     </button></div>
 
@@ -120,14 +113,25 @@
                $(document).on('click', '.booking-reference-button', function () {
                    const dateVal = $('#InputDate').val();
                    const timeVal = $('#InputTime').val();
+                   const guest= $('#InputGuest').val();
                    var TableID = $(this).attr('tableID');
                    $('#TableTarget').val(TableID);
                    $('#selected_date').val(dateVal);
                    $('#selected_time').val(timeVal);
                    $('#DateInput').val(dateVal);
                    $('#TimeInput').val(timeVal);
+                   $('#guest').val(guest);
                });
            });
+
+
+           function restrictAlphabets(e) {
+               var x = e.which || e.keycode;
+               if ((x >= 48 && x <= 57 ))
+                   return true;
+               else
+                   return false;
+           }
        </script>
 
    </body>

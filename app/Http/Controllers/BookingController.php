@@ -9,10 +9,17 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Session;
 
 class BookingController extends Controller
 {
+
+    public function bookingList(){
+        $bookingList=Bookings::where('status',true)->get();
+        return view('index',compact('bookingList'));
+    }
+
     /**
      * Getting the booking information through post method.
      *
@@ -119,6 +126,29 @@ class BookingController extends Controller
     }
 
     public function ReserveTable(Request $request) {
-        dd($request);
+
+        $data= $this->validate($request,[
+             'first_name'=>'required|string|min:3',
+             'last_name'=>'required|string|min:3',
+            'email'=>'required|email',
+            'phone_no'=>'required|min:10',
+        ]);
+            $data['reserved_table_id']=$request->table_id;
+            $data['booking_date']=$request->date;
+            $data['booking_time']=$request->time;
+            $data['number_of_guests']=$request->number_of_guests;
+             $insert=Bookings::create( $data);
+             return redirect()->route('booking.list')->with('success','Booking has been done successfully!');
     }
+
+    public function destroy($id){
+        $booking = Bookings::find(Crypt::decrypt($id));
+
+            $delete = $booking->update([
+                'status' => false,
+            ]);
+        return redirect()->route('booking.list')->with('success','Booking has been Deleted successfully!');
+    }
+
+
 }

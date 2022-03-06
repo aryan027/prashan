@@ -1,7 +1,7 @@
 
     @forelse($tables as $key=> $data)
         <?php $table = (new App\Http\Controllers\BookingController)->GetTableInformation($data) ?>
-        <div class="card mt-2 d-inline-flex p-2 bg-warning" style="max-width:15rem;">
+        <div class="card mt-2 d-inline-flex p-2 " style="max-width:15rem; background-color:lightgoldenrodyellow">
             <div class="card-body ">
                 <p class="text-primary">Table Number is : {{ $table->table_number }}</p>
                 <p class="text-secondary">Serving Capacity is : {{ $table->TableType->serving_capacity }}</p>
@@ -23,6 +23,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+                        <input type="hidden" id="guest" name="number_of_guests" >
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="mb-3">
@@ -63,7 +64,7 @@
                             <div class="col-sm-6">
                                 <div class="mb-3">
                                     <label for="phone_no" class="form-label">Phone No.</label>
-                                    <input type="text" class="form-control" name="phone_no" id="phone_no" placeholder="Enter you number">
+                                    <input type="text" maxlength="10" class="form-control" name="phone_no" id="phone_no" placeholder="Enter you number">
                                 </div>
                             </div>
                         </div>
