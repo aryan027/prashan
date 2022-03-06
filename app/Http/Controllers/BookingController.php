@@ -9,32 +9,31 @@ use Illuminate\Http\Request;
 
 class BookingController extends Controller
 {
-    public function ListAvailability()
+    public function ListAvailability($date, $time, $guest)
     {
-        $now = Carbon::now()->toDateTimeString();
-        $guest = 3;
-        $book_date = date('Y-m-d', strtotime($now));
-        $book_time = date('H:i', strtotime($now));
-        $games = Tables::whereHas('TableType', function($q) {$q->where('serving_capacity','>=', 1);})->get();
-        $tables = Tables::where(['status' => true])->get();
+        $book_date = date('Y-m-d', strtotime($date));
+        $book_time = date('H:i', strtotime($time));
+        $tables = Tables::whereHas('TableType', function ($q) use ($guest) {$q->where('serving_capacity', '>=', $guest);})->where(['status' => true])->get();
+        $tableList = array();
+        foreach ($tables as $table) {
+            $tableList[] = $table->id;
+        }
         $start_time = date('H:i', strtotime('-1 Hours', strtotime($book_time)));
         $end_time = date('H:i', strtotime('+1 Hours', strtotime($book_time)));
-        $serviceable = $this->GetNonFunctionalityTime($book_date, $book_time);
+        $serviceable = $this->GetNonFunctionalityTime($book_date, $start_time);
         if ($serviceable == true) {
             return 'this is a non service time';
         }
         $bookings = Bookings::whereBetween('booking_time', [$start_time, $end_time])->where(['booking_date' => $book_date, 'status' => true])->get();
         if (count($bookings) > 0) {
             foreach ($bookings as $booking) {
-                $games = Game::whereHas('video', function($q)
-                {
-                    $q->where('available','=', 1);
-                })->get();
-                dd($booking->ReservedTable->TableType->serving_capacity);
+                $sub = array_search($booking['reserved_table_id'], $tableList);
+                if (!empty($sub)) {
+                    unset($tableList[$sub]);
+                }
             }
-        } else {
-            return 'seats are not booked list all the tables.';
         }
+        return view('welcome', compact('tableList'));
     }
 
     /**
@@ -47,7 +46,7 @@ class BookingController extends Controller
     private function GetNonFunctionalityTime($book_date, $book_time) {
         $non_service_days = array(
             'Saturday' => array('start' => 15, 'end' => 20),
-            'Sunday' => array('start' => 8, 'end' => 20)
+            'Sunday' => array('start' => 18, 'end' => 20)
         );
         $non_service_time = false;
         $book_hour = date('H', strtotime($book_time));
@@ -60,5 +59,10 @@ class BookingController extends Controller
             }
         }
         return $non_service_time;
+    }
+
+    public function GetTableInformation($id) {
+        $id = htmlspecialchars(stripslashes($id));
+        return Tables::with('TableType')->find($id);
     }
 }

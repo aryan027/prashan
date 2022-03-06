@@ -55,6 +55,14 @@
                </div>
            </div>
        </nav>
+       @forelse($tableList as $table)
+           @php $tableInfo = (new \App\Http\Controllers\BookingController)->GetTableInformation($table); @endphp
+           <div class="container">
+               <p>table number is {{ $tableInfo->table_number }} and status is {{ $tableInfo->status }} and serving capacity is {{ $tableInfo->TableType->serving_capacity }}</p>
+           </div>
+       @empty
+           <p>no tables are available</p>
+       @endforelse
        <div class="container">
            <div class="row justify-content-center">
                <div class="col-md-8">
