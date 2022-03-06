@@ -116,6 +116,17 @@
                        }
                    });
                });
+
+               $(document).on('click', '.booking-reference-button', function () {
+                   const dateVal = $('#InputDate').val();
+                   const timeVal = $('#InputTime').val();
+                   var TableID = $(this).attr('tableID');
+                   $('#TableTarget').val(TableID);
+                   $('#selected_date').val(dateVal);
+                   $('#selected_time').val(timeVal);
+                   $('#DateInput').val(dateVal);
+                   $('#TimeInput').val(timeVal);
+               });
            });
        </script>
 

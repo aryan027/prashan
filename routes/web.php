@@ -26,3 +26,4 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::post('/book', [BookingController::class, 'ListAvailability'])->name('booking');
 Route::get('list-tables', [BookingController::class, 'LoadTablesInside'])->name('list.tables');
+Route::post('book-table', [BookingController::class, 'ReserveTable'])->name('book.success');

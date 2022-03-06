@@ -117,4 +117,8 @@ class BookingController extends Controller
         }
         return false;
     }
+
+    public function ReserveTable(Request $request) {
+        dd($request);
+    }
 }
