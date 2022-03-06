@@ -17,12 +17,13 @@ class BookingController extends Controller
         $book_time = date('H:i', strtotime($now));
         $games = Tables::whereHas('TableType', function($q) {$q->where('serving_capacity','>=', 1);})->get();
         $tables = Tables::where(['status' => true])->get();
+        $start_time = date('H:i', strtotime('-1 Hours', strtotime($book_time)));
         $end_time = date('H:i', strtotime('+1 Hours', strtotime($book_time)));
         $serviceable = $this->GetNonFunctionalityTime($book_date, $book_time);
         if ($serviceable == true) {
             return 'this is a non service time';
         }
-        $bookings = Bookings::whereBetween('booking_time', [$book_time, $end_time])->where(['booking_date' => $book_date, 'status' => true])->get();
+        $bookings = Bookings::whereBetween('booking_time', [$start_time, $end_time])->where(['booking_date' => $book_date, 'status' => true])->get();
         if (count($bookings) > 0) {
             foreach ($bookings as $booking) {
                 $games = Game::whereHas('video', function($q)
