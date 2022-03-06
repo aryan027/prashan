@@ -30,6 +30,14 @@ class BookingController extends Controller
         $guest = $data['guest'];
         $book_date = date('Y-m-d', strtotime($date));
         $book_time = date('H:i', strtotime($time));
+        $TimeStamp = Carbon::now()->toDateTimeString();
+        $TodayDate = date('Y-m-d', strtotime($TimeStamp));
+        if ($book_date == $TodayDate) {
+            $prior = $this->CheckIfReservationIsBeforeTwoHours($book_time);
+            if ($prior == true) {
+                return false;
+            }
+        }
         $tables = Tables::whereHas('TableType', function ($q) use ($guest) {$q->where('serving_capacity', '>=', $guest);})->where(['status' => true])->get();
         $tableList = array();
         foreach ($tables as $table) {
@@ -87,5 +95,16 @@ class BookingController extends Controller
     public function LoadTablesInside() {
         $tables = Session::get('tables');
         return view('table', compact('tables'));
+    }
+
+    public function CheckIfReservationIsBeforeTwoHours($time) {
+        $book_time = date('H:i', strtotime($time));
+        $TimeStamp = Carbon::now()->toDateTimeString();
+        $nowTime = date('H:i', strtotime($TimeStamp));
+        $duration = (strtotime($nowTime) - strtotime($book_time)) / 3600;
+        if ($duration >= '2') {
+            return true;
+        }
+        return false;
     }
 }
