@@ -25,6 +25,10 @@ class BookingController extends Controller
             'time' => 'required',
             'guest' => 'required|numeric'
         ]);
+        $response = array(
+            'status' => true,
+            'message' => 'fetched successfully'
+        );
         $date = $data['date'];
         $time = $data['time'];
         $guest = $data['guest'];
@@ -32,10 +36,13 @@ class BookingController extends Controller
         $book_time = date('H:i', strtotime($time));
         $TimeStamp = Carbon::now()->toDateTimeString();
         $TodayDate = date('Y-m-d', strtotime($TimeStamp));
-        if ($book_date == $TodayDate) {
+        if ((strtotime($book_date) - strtotime($TodayDate)) == 0) {
             $prior = $this->CheckIfReservationIsBeforeTwoHours($book_time);
-            if ($prior == true) {
-                return false;
+            if ($prior !== true) {
+                $response = array(
+                    'status' => false,
+                    'message' => 'Booking Before 2 hours are not allowed',
+                );
             }
         }
         $tables = Tables::whereHas('TableType', function ($q) use ($guest) {$q->where('serving_capacity', '>=', $guest);})->where(['status' => true])->get();
@@ -47,7 +54,10 @@ class BookingController extends Controller
         $end_time = date('H:i', strtotime('+1 Hours', strtotime($book_time)));
         $serviceable = $this->GetNonFunctionalityTime($book_date, $start_time);
         if ($serviceable == true) {
-            return 'this is a non service time';
+            $response = array(
+                'status' => false,
+                'message' => 'Restaurant is closed during this time period'
+            );
         }
         $bookings = Bookings::whereBetween('booking_time', [$start_time, $end_time])->where(['booking_date' => $book_date, 'status' => true])->get();
         if (count($bookings) > 0) {
@@ -60,7 +70,7 @@ class BookingController extends Controller
         }
         Session::forget('tables');
         Session::put('tables', $tableList);
-        return true;
+        return response($response);
     }
 
     /**
@@ -73,7 +83,7 @@ class BookingController extends Controller
     private function GetNonFunctionalityTime($book_date, $book_time) {
         $non_service_days = array(
             'Saturday' => array('start' => 15, 'end' => 20),
-            'Sunday' => array('start' => 18, 'end' => 20)
+            'Sunday' => array('start' => 8, 'end' => 20)
         );
         $non_service_time = false;
         $book_hour = date('H', strtotime($book_time));
@@ -101,7 +111,7 @@ class BookingController extends Controller
         $book_time = date('H:i', strtotime($time));
         $TimeStamp = Carbon::now()->toDateTimeString();
         $nowTime = date('H:i', strtotime($TimeStamp));
-        $duration = (strtotime($nowTime) - strtotime($book_time)) / 3600;
+        $duration = (strtotime($book_time) - strtotime($nowTime)) / 3600;
         if ($duration >= '2') {
             return true;
         }

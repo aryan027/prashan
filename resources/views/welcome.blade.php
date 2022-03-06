@@ -70,7 +70,7 @@
                             </div>
                             <div class="row mt-5">
                                 <div class="col-sm-3">
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="BookNowBTN">
+                                    <button type="button" class="btn btn-primary" id="BookNowBTN">
                                        BookNow
                                     </button>
                                 </div>
@@ -164,11 +164,12 @@
                            guest: guestVal
                        },
                        success: function (response) {
-                           if (response == true) {
+                           if (response.status == true) {
                                $("#TablesResult").empty();
                                $("#TablesResult").load(LoadTables);
                            } else {
                                $("#TablesResult").empty();
+                               alert(response.message);
                            }
                        },
                        error: function () {
