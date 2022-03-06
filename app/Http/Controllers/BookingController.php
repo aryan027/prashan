@@ -77,8 +77,7 @@ class BookingController extends Controller
         return $non_service_time;
     }
 
-    public function GetTableInformation($id) {
-        $id = htmlspecialchars(stripslashes($id));
-        return Tables::with('TableType')->find($id);
+    public function LoadTablesInside($tables) {
+        return view('table', compact('tables'));
     }
 }
