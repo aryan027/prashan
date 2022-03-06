@@ -9,6 +9,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Session;
 
 class BookingController extends Controller
 {
@@ -49,7 +50,9 @@ class BookingController extends Controller
                 }
             }
         }
-        return $tableList;
+        Session::forget('tables');
+        Session::put('tables', $tableList);
+        return true;
     }
 
     /**
@@ -77,7 +80,12 @@ class BookingController extends Controller
         return $non_service_time;
     }
 
-    public function LoadTablesInside($tables) {
+    public function GetTableInformation($id) {
+        return Tables::find($id);
+    }
+
+    public function LoadTablesInside() {
+        $tables = Session::get('tables');
         return view('table', compact('tables'));
     }
 }

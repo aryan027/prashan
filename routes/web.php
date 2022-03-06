@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    $tables = array();
+    Session::forget('tables');
+    Session::put('tables', $tables);
     return view('welcome');
 });
 
@@ -22,3 +25,4 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::post('/book', [BookingController::class, 'ListAvailability'])->name('booking');
+Route::get('list-tables', [BookingController::class, 'LoadTablesInside'])->name('list.tables');
