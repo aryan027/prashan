@@ -16,7 +16,7 @@ class BookingController extends Controller
 {
 
     public function bookingList(){
-        $bookingList=Bookings::where('status',true)->get();
+        $bookingList = Bookings::where('status',true)->get();
         return view('index',compact('bookingList'));
     }
 
