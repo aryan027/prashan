@@ -40,7 +40,7 @@
 </nav>
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-810">
             @if ($message = Session::get('success'))
                 <div class="alert alert-success">
                     <p>{{ $message }}</p>
@@ -48,7 +48,7 @@
             @endif
             <div class="card mt-4">
                 <div class="card-header">{{ __('Booking List') }}</div>
-                <div class="card-body">
+                <div class="card-body text-center">
                    <table class="table table-striped table-hover">
                        <thead>
                        <tr>
@@ -58,7 +58,8 @@
                            <td>Phone No</td>
                            <td>Booking Date</td>
                            <td>Booking Time</td>
-                           <td> Person</td>
+                           <td>Guests</td>
+                           <td>Table Number</td>
                            <td>Action</td>
                        </tr>
                        </thead>
@@ -72,8 +73,9 @@
                                 <td>{{  date('d-M-Y', strtotime( $booking->booking_date)) }}</td>
                                 <td>{{ $booking->booking_time }}</td>
                                 <td>{{ $booking->number_of_guests }}</td>
+                                <td>{{ $booking->ReservedTable->table_number }}</td>
                                 <td>
-                                        <a id="delKey{{$key}}" href="#" class="mb-2 mr-2 text-danger btn-hover-shine">Cancel</a>
+                                        <a id="delKey{{$key}}" href="#" class="mb-2 mr-2 text-danger btn-hover-shine">Mark Completed</a>
 
                                     <form action="{{ route('booking.destroy',\Illuminate\Support\Facades\Crypt::encrypt($booking->id)) }}" method="post" id="delNum{{$key}}">
                                         @csrf </form>
@@ -86,14 +88,14 @@
                                                 showCancelButton: true,
                                                 confirmButtonColor: '#d33',
                                                 cancelButtonColor: '#3085d6',
-                                                confirmButtonText: 'Yes, delete it!'
+                                                confirmButtonText: 'Yes, Completed!'
                                             }).then((result) => {
                                                 if (result.isConfirmed) {
                                                     document.getElementById('delNum{{$key}}').submit();
                                                 } else {
                                                     swal.fire({
                                                         title: "Action Stopped!",
-                                                        text: "Your Data is Safe Now!",
+                                                        text: "Table is Still Occupied!",
                                                         icon: "info",
                                                     })
                                                 }
@@ -105,7 +107,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="7" class="text-danger text-center"> No Booking Found ...!</td>
+                                <td colspan="9" class="text-danger text-center"> No Booking Found ...!</td>
                             </tr>
                         @endforelse
                        </tbody>
